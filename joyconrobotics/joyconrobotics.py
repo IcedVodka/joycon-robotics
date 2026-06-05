@@ -172,9 +172,15 @@ class JoyconRobotics:
         elif device == "left":
             self.joycon_id = get_L_id()
         else:
-            print("get a wrong device name of joycon")
-        device_serial = self.joycon_id[2][:6]
-        
+            raise ValueError(f"get a wrong device name of joycon: {device!r}")
+
+        # patched — defend against None joycon_id when device not found
+        if self.joycon_id is None or self.joycon_id[0] is None:
+            raise IOError(f"No {device} Joy-Con found via HID. "
+                          f"Please check Bluetooth connection and that the device is paired.")
+
+        device_serial = self.joycon_id[2][:6] if self.joycon_id[2] else "unknown"
+
         # init joycon
         self.joycon = JoyCon(*self.joycon_id)
         
@@ -230,8 +236,9 @@ class JoyconRobotics:
         
         self.button_control = 0
         
-        if device_serial != JOYCON_SERIAL_SUPPORT and self.joycon_id != None:
-            raise IOError("There is no joycon for robotics")
+        # patched — removed serial prefix check to support standard Nintendo Joy-Con
+        # if device_serial != JOYCON_SERIAL_SUPPORT and self.joycon_id != None:
+        #     raise IOError("There is no joycon for robotics")
         
         self.running = True
         self.lock = threading.Lock()

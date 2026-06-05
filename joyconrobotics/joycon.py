@@ -27,8 +27,9 @@ class JoyCon:
         if product_id not in JOYCON_PRODUCT_IDS:
             raise ValueError(f'product_id is invalid: {product_id!r}')
         
-        if serial[:9] not in JOYCON_SERIAL_HEAD:
-            raise ValueError(f'serial is invalid: {serial!r}')
+        # patched — removed serial prefix check to support standard Nintendo Joy-Con
+        # if serial[:9] not in JOYCON_SERIAL_HEAD:
+        #     raise ValueError(f'serial is invalid: {serial!r}')
 
         self.vendor_id   = vendor_id
         self.product_id  = product_id

@@ -23,9 +23,12 @@ def get_device_ids(debug=False):
         if not product_string:
             continue
         
-        if serial[0:6] != '9c:54:':
-            return (0x057A, product_id, serial)
-        
+        if not serial:
+            continue
+        # NOTE: patched — removed '9c:54:' filter to support standard Nintendo Joy-Con
+        # if serial[0:6] != '9c:54:':
+        #     continue
+
         out.append((vendor_id, product_id, serial))
 
         if debug:
