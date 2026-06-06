@@ -167,7 +167,11 @@ class JoyconRobotics:
                  all_button_return = False
                  ):
         
-        if device == "right":
+        # 支持直接传入 (vendor_id, product_id, serial) 元组，或字符串 "right"/"left"
+        if isinstance(device, (tuple, list)) and len(device) == 3:
+            self.joycon_id = tuple(device)
+            device = "right" if self.joycon_id[1] == 0x2007 else "left"
+        elif device == "right":
             self.joycon_id = get_R_id()
         elif device == "left":
             self.joycon_id = get_L_id()
